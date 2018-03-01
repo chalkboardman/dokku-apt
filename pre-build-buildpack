@@ -31,6 +31,12 @@ if [ -f $DIR/apt-packages ]; then
     apt-get install -y \$PACKAGES
     echo "-----> Injected packages: \$PACKAGES"
 fi
+if [ -f $DIR/apt-repackages ]; then
+    PACKAGES=\$(cat "$DIR/apt-repackages" | tr "\\n" " ")
+    apt-get update
+    apt-get install -y --reinstall \$PACKAGES
+    echo "-----> Injected packages for reinstall: \$PACKAGES"
+fi
 if [ -d $DIR/dpkg-packages ]; then
     for pkg in $DIR/dpkg-packages/*.deb; do
         dpkg -i \$pkg
